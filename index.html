@@ -1,0 +1,534 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Pomparan Ompung Halasan</title>
+<meta name="theme-color" content="#0F4C81">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Silsilah POH">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&display=swap">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}[hidden]{display:none!important}</style>
+<style>
+/* Layout: kepala berpola ulos dari 10 warna cabang, lalu 10 cabang sebagai "tali" vertikal: anak → pahompu → nini */
+:root{
+  --fs:18px;
+  --bg:#F0EEE9;          /* Pantone 11-4201 Cloud Dancer */
+  --paper:#FBFAF7;
+  --ink:#24211E;
+  --muted:#5F5952;
+  --line:#D9D4CB;
+  --chip:#E7E3DB;
+  --focus:#0F4C81;
+  --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body:"Atkinson Hyperlegible", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --c1:#0F4C81; --c2:#BB2649; --c3:#A47864; --c4:#6667AB; --c5:#009473;
+  --c6:#5F4B8B; --c7:#955251; --c8:#DD4124; --c9:#6E9637; --c10:#B565A7;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#1B1A18; --paper:#252320; --ink:#F0EEE9; --muted:#B9B2A8; --line:#3A3631; --chip:#302D29; --focus:#8FB6DF;
+  --c1:#5B8FC4; --c2:#E0577A; --c3:#C99A84; --c4:#9091D4; --c5:#2DBB98;
+  --c6:#9C86C9; --c7:#C77E7C; --c8:#F0714F; --c9:#9CC764; --c10:#D58BC8; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#1B1A18; --paper:#252320; --ink:#F0EEE9; --muted:#B9B2A8; --line:#3A3631; --chip:#302D29; --focus:#8FB6DF;
+  --c1:#5B8FC4; --c2:#E0577A; --c3:#C99A84; --c4:#9091D4; --c5:#2DBB98;
+  --c6:#9C86C9; --c7:#C77E7C; --c8:#F0714F; --c9:#9CC764; --c10:#D58BC8; color-scheme:dark}
+
+html{font-size:var(--fs)}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:1rem;line-height:1.55;-webkit-text-size-adjust:100%}
+.wrap{max-width:860px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:6px}
+
+/* ulos stripe */
+.ulos{height:14px;display:flex}
+.ulos i{flex:1;background:var(--c)}
+.ulos i:nth-child(odd){flex:1.6}
+
+header.top{padding-block:28px 8px}
+.eyebrow{font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(2.1rem,7vw,3.4rem);line-height:1.02;margin:.25rem 0 .6rem;letter-spacing:-.02em;text-wrap:balance}
+.lede{color:var(--muted);max-width:60ch;margin:0}
+.stats{display:flex;flex-wrap:wrap;gap:10px 22px;margin:18px 0 6px;padding:0;list-style:none}
+.stats li{display:flex;flex-direction:column}
+.stats b{font-family:var(--display);font-size:1.6rem;line-height:1.1;font-variant-numeric:tabular-nums}
+.stats span{font-size:.8rem;color:var(--muted)}
+
+/* toolbar */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+.bar .wrap{padding-block:10px;display:flex;flex-direction:column;gap:10px}
+.searchrow{display:flex;gap:8px;align-items:center}
+.search{flex:1;min-width:0;position:relative}
+.search input{width:100%;box-sizing:border-box;font:inherit;padding:.6rem .9rem .6rem 2.4rem;border:2px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink)}
+.search input:focus{border-color:var(--focus);outline:none}
+.search svg{position:absolute;left:.75rem;top:50%;transform:translateY(-50%);width:1.1rem;height:1.1rem;color:var(--muted)}
+.tbtn{border:2px solid var(--line);background:var(--paper);border-radius:12px;padding:.45rem .7rem;cursor:pointer;font-weight:700;min-width:2.8rem}
+.tbtn:hover{border-color:var(--muted)}
+.chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;display:flex;align-items:center;gap:6px;border:0;background:var(--chip);border-radius:999px;padding:.3rem .75rem .3rem .35rem;cursor:pointer;font-size:.85rem;font-weight:700;white-space:nowrap}
+.chip .dot{width:1.35rem;height:1.35rem;border-radius:50%;background:var(--c);color:#fff;display:grid;place-items:center;font-size:.72rem;font-variant-numeric:tabular-nums}
+.results{position:absolute;left:0;right:0;top:calc(100% + 6px);background:var(--paper);border:2px solid var(--line);border-radius:12px;max-height:60vh;overflow:auto;box-shadow:0 12px 30px rgba(0,0,0,.18);z-index:40}
+.results button{display:flex;width:100%;text-align:left;gap:10px;align-items:center;border:0;background:none;padding:.6rem .9rem;cursor:pointer;border-bottom:1px solid var(--line)}
+.results button:hover,.results button:focus-visible{background:var(--chip)}
+.results .dot{flex:none;width:.7rem;height:.7rem;border-radius:50%;background:var(--c)}
+.results small{display:block;color:var(--muted);font-size:.8rem}
+.results .none{padding:.8rem .9rem;color:var(--muted)}
+mark{background:color-mix(in srgb,var(--focus) 22%,transparent);color:inherit;border-radius:3px}
+
+/* tree */
+main{padding-block:22px 60px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.8rem;color:var(--muted);margin-bottom:18px}
+.legend span{display:inline-flex;gap:6px;align-items:center}
+.branch{margin:0 0 22px;background:var(--paper);border-radius:16px;border:1px solid var(--line);overflow:hidden;scroll-margin-top:150px}
+.b-head{display:flex;gap:14px;align-items:flex-start;padding:16px 16px 14px;border-top:8px solid var(--c)}
+.b-no{flex:none;font-family:var(--display);font-weight:800;font-size:1.9rem;line-height:1;color:var(--c);min-width:1.6ch;font-variant-numeric:tabular-nums}
+.b-main{flex:1;min-width:0}
+.b-kicker{font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.toggle{flex:none;border:0;background:var(--chip);border-radius:10px;width:2.4rem;height:2.4rem;cursor:pointer;display:grid;place-items:center}
+.toggle svg{width:1.1rem;height:1.1rem;transition:transform .2s}
+.branch.closed .toggle svg{transform:rotate(-90deg)}
+.branch.closed .b-body{display:none}
+
+.pname{border:0;background:none;padding:0;text-align:left;cursor:pointer;font-weight:700;text-decoration:underline;text-decoration-color:transparent;text-underline-offset:3px}
+.pname:hover{text-decoration-color:currentColor}
+.pname.sp{font-weight:400}
+.couple{display:flex;flex-direction:column;gap:1px;min-width:0}
+.couple .line{display:flex;flex-wrap:wrap;column-gap:.4rem;align-items:baseline}
+.amp{color:var(--muted);font-size:.85rem}
+.nick{display:block;color:var(--muted);font-size:.85rem;font-style:italic}
+.rip{color:var(--muted);font-weight:400;margin-left:.15rem}
+.no{display:inline-block;min-width:1.7em;margin-right:.35em;padding:0 .3em;border-radius:6px;background:var(--chip);color:var(--muted);font-family:var(--body);font-weight:700;font-size:.78em;text-align:center;font-variant-numeric:tabular-nums;vertical-align:.08em;line-height:1.5;text-decoration:none}
+.g3list .pname .no{background:var(--paper)}
+.b-head .pname{font-family:var(--display);font-size:1.25rem;font-weight:700}
+.b-head .pname.sp{font-weight:500}
+
+.g2list{list-style:none;margin:0;padding:4px 16px 16px 16px;display:flex;flex-direction:column;gap:2px}
+.g2{position:relative;padding:10px 0 10px 26px}
+.g2::before{content:"";position:absolute;left:7px;top:0;bottom:0;width:3px;background:var(--c);opacity:.35;border-radius:2px}
+.g2:last-child::before{bottom:calc(100% - 22px)}
+.g2::after{content:"";position:absolute;left:7px;top:21px;width:13px;height:3px;background:var(--c);opacity:.35}
+.g2 > .couple{font-size:1.05rem}
+.genlab{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700;margin:6px 0 4px}
+.g3list{list-style:none;margin:6px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.g3list .pname{display:inline-block;font-weight:400;background:var(--chip);border-radius:999px;padding:.25rem .75rem;font-size:.92rem;text-decoration:none;border-left:4px solid var(--c)}
+.g3list .pname:hover{filter:brightness(.96)}
+.flash{animation:flash 1.6s ease-out}
+@keyframes flash{0%,40%{background:color-mix(in srgb,var(--c,var(--focus)) 30%,transparent);border-radius:8px}100%{background:transparent}}
+.g3list .pname.flash{animation:none;outline:3px solid var(--c);outline-offset:2px}
+
+/* sheet */
+.scrim{position:fixed;inset:0;background:rgba(20,18,16,.45);z-index:60;display:flex;align-items:flex-end;justify-content:center}
+.sheet{background:var(--paper);width:100%;max-width:560px;max-height:88vh;overflow:auto;border-radius:20px 20px 0 0;border-top:10px solid var(--c);padding:18px max(18px,env(safe-area-inset-right,0px)) calc(24px + env(safe-area-inset-bottom,0px)) max(18px,env(safe-area-inset-left,0px));box-sizing:border-box}
+@media (min-width:700px){.scrim{align-items:center}.sheet{border-radius:20px}}
+.sheet-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.sheet h2{font-family:var(--display);font-size:1.6rem;line-height:1.15;margin:.2rem 0 .2rem;text-wrap:balance}
+.role{display:inline-block;background:var(--c);color:#fff;font-weight:700;font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;padding:.2rem .6rem;border-radius:999px}
+.close{flex:none;border:0;background:var(--chip);border-radius:10px;width:2.4rem;height:2.4rem;cursor:pointer;font-size:1.3rem;line-height:1}
+.facts{margin:14px 0 0;display:grid;grid-template-columns:auto 1fr;gap:8px 14px}
+.facts dt{color:var(--muted);font-size:.85rem;padding-top:.1rem}
+.facts dd{margin:0;min-width:0}
+.facts dd .pname{display:block;margin-bottom:2px}
+.facts .none{color:var(--muted)}
+
+footer{color:var(--muted);font-size:.82rem;padding-block:0 40px}
+footer p{max-width:62ch}
+@media (max-width:480px){
+  .b-head{gap:10px}
+  .g2{padding-left:20px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.rootcard{background:var(--ink);color:var(--bg);border-radius:16px;padding:16px 18px;margin-bottom:22px;display:flex;flex-direction:column;gap:2px}
+.rootcard .eyebrow{color:var(--bg);opacity:.7}
+.rootcard strong{font-family:var(--display);font-size:1.4rem}
+.rootcard strong span{opacity:.6;font-weight:400}
+.rootcard em{opacity:.75;font-size:.9rem}
+/* view switch */
+.seg{align-self:flex-start;display:inline-flex;background:var(--chip);border-radius:12px;padding:3px;flex:none}
+.seg button{border:0;background:none;padding:.35rem .8rem;border-radius:9px;font-weight:700;cursor:pointer;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--paper);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.chip.all .dot{background:var(--muted)}
+
+/* tree view */
+.treewrap{padding-block:16px 24px}
+.viewport{position:relative;height:max(480px,calc(100dvh - 200px));border:1px solid var(--line);border-radius:18px;background:var(--bg);background-image:radial-gradient(color-mix(in srgb,var(--muted) 30%,transparent) 1px,transparent 1.3px);background-size:26px 26px;overflow:hidden;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none}
+.treewrap.full{position:fixed;inset:0;z-index:50;background:var(--bg);padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px);max-width:none}
+.treewrap.full .viewport{height:100%;border:0;border-radius:0}
+.viewport.drag{cursor:grabbing}
+.stage{position:absolute;left:0;top:0;transform-origin:0 0;will-change:transform}
+.stage svg{position:absolute;left:0;top:0;overflow:visible}
+.tn{position:absolute;box-sizing:border-box;background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;gap:6px;overflow:hidden;line-height:1.25;box-shadow:0 1px 2px rgba(0,0,0,.05),0 8px 22px -10px color-mix(in srgb,var(--c) 45%,transparent)}
+.tn-k{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--c)}
+.pr{display:flex;align-items:center;gap:10px;min-width:0}
+.av{flex:none;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:14px;letter-spacing:.02em;background:var(--c);color:#fff;font-family:var(--display)}
+.av.o{background:var(--paper);color:var(--c);box-shadow:inset 0 0 0 2.5px var(--c)}
+.av.dead{filter:grayscale(.7);opacity:.75}
+.tn .pname{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:16.5px;min-width:0}
+.tn .pname.sp{font-size:15.5px}
+.tn .nick{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-left:2px}
+.tn.t1{padding:0;gap:0;border:0;box-shadow:0 1px 2px rgba(0,0,0,.06),0 14px 30px -12px color-mix(in srgb,var(--c) 60%,transparent)}
+.tn.t1 .band{background:var(--c);color:#fff;padding:8px 14px;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.tn.t1 .band b{font-family:var(--display);font-size:17px;letter-spacing:.01em}
+.tn.t1 .band span{font-size:11.5px;opacity:.85;letter-spacing:.06em;text-transform:uppercase}
+.tn.t1 .inner{padding:12px 14px;display:flex;flex-direction:column;gap:7px;border:1px solid var(--line);border-top:0;border-radius:0 0 16px 16px;flex:1;min-height:0}
+.tn.t1 .pname{font-family:var(--display);font-size:18px}
+.tn.t1 .pname.sp{font-weight:500;font-size:16.5px}
+.tn.t1 .av{width:44px;height:44px;font-size:15px}
+.tn.t2{border-top:5px solid var(--c)}
+.tn.t3{flex-direction:row;align-items:center;gap:10px;padding:8px 12px;border-radius:14px;background:color-mix(in srgb,var(--c) 9%,var(--paper))}
+.tn.t3 .av{width:34px;height:34px;font-size:12.5px}
+.tn.t3 .pname{font-weight:400;font-size:15px}
+.tn.root{background:var(--ink);color:var(--bg);border:0;align-items:center;justify-content:center;text-align:center;padding:0;gap:4px;box-shadow:0 18px 40px -16px rgba(0,0,0,.5)}
+.tn.root .stripe{position:absolute;inset:auto 0 0 0;height:12px;display:flex}
+.tn.root .stripe i{flex:1;background:var(--c)}
+.tn.root .tn-k{color:var(--bg);opacity:.7}
+.tn.root b{font-family:var(--display);font-size:30px;font-weight:800;letter-spacing:-.01em;line-height:1}
+.tn.root small{font-size:13px;opacity:.7;margin-bottom:12px;font-style:italic}
+.tn.root .rc{font-size:17px;font-weight:700;margin-top:4px}
+.tn.root .rc em{font-style:normal;opacity:.6;font-weight:400;margin:0 .2em}
+.tn.flash{animation:none;outline:4px solid var(--c);outline-offset:4px}
+.zoom{position:absolute;right:calc(10px + env(safe-area-inset-right,0px));bottom:10px;display:flex;flex-direction:column;gap:6px;z-index:2}
+.zoom button{width:2.6rem;height:2.6rem;border-radius:12px;border:1px solid var(--line);background:var(--paper);font-weight:700;font-size:1.15rem;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.1)}
+.zoom button.fit{font-size:.62rem;line-height:1.1}
+.zoom button svg{width:1.15rem;height:1.15rem;display:block;margin:auto}
+.hint{position:absolute;left:10px;bottom:10px;right:4.5rem;font-size:.75rem;color:var(--muted);background:color-mix(in srgb,var(--bg) 85%,transparent);padding:.3rem .6rem;border-radius:8px;pointer-events:none;width:max-content;max-width:calc(100% - 5.5rem)}
+</style>
+</head>
+<body>
+<div class="ulos" id="ulos" aria-hidden="true"></div>
+<header class="top wrap">
+  <div class="eyebrow">Tarombo · Pomparan</div>
+  <h1>Pomparan Ompung Halasan</h1>
+  <p class="lede">Silsilah keturunan M. Nababan (Op. Halasan Doli) dan T. br Lubis (Op. Halasan Boru): sepuluh anak beserta pahompu dan nini. Ketuk nama untuk melihat orang tua, pasangan, saudara, dan anak.</p>
+  <ul class="stats" id="stats"></ul>
+</header>
+
+<div class="bar">
+  <div class="wrap">
+    <div class="searchrow">
+      <div class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="q" type="search" placeholder="Cari nama atau panggilan…" autocomplete="off" aria-label="Cari nama">
+        <div class="results" id="results" hidden></div>
+      </div>
+      <button class="tbtn" id="fsDown" aria-label="Perkecil tulisan">A−</button>
+      <button class="tbtn" id="fsUp" aria-label="Perbesar tulisan">A+</button>
+    </div>
+    <div class="seg" role="group" aria-label="Tampilan"><button id="vTree" aria-pressed="true">Pohon</button><button id="vList" aria-pressed="false">Daftar</button></div>
+    <nav class="chips" id="chips" aria-label="Lompat ke cabang"></nav>
+  </div>
+</div>
+
+<section class="treewrap wrap" id="treeView">
+  <div class="viewport" id="vp">
+    <div class="stage" id="stage"></div>
+    <div class="hint" id="hint">Geser untuk menjelajah · cubit atau scroll untuk zoom · ketuk nama untuk detail</div>
+    <div class="zoom"><button id="zIn" aria-label="Perbesar">+</button><button id="zOut" aria-label="Perkecil">−</button><button class="fit" id="zFit" aria-label="Tampilkan seluruh pohon">Pas<br>layar</button><button id="zFull" aria-label="Layar penuh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button></div>
+  </div>
+</section>
+
+<main class="wrap" id="listView" hidden>
+  <div class="legend" id="legend">
+    <span><b>Anak</b> generasi I</span><span><b>Pahompu</b> generasi II (cucu)</span><span><b>Nini</b> generasi III (cicit)</span><span>† almarhum/almarhumah</span>
+  </div>
+  <div class="rootcard"><span class="eyebrow">Ompung Halasan</span><strong>M. Nababan <span>&amp;</span> T. br Lubis</strong><em>Op. Halasan Doli · Op. Halasan Boru</em></div>
+  <div id="tree"></div>
+</main>
+
+<footer class="wrap">
+  <p>Warna tiap cabang diambil dari Pantone Color of the Year: Classic Blue, Viva Magenta, Mocha Mousse, Very Peri, Emerald, Ultra Violet, Marsala, Tangerine Tango, Greenery, dan Radiant Orchid, di atas latar Cloud Dancer (2026). Angka di depan setiap nama adalah nomor urut dari tabel sumber.</p>
+</footer>
+
+<div class="scrim" id="scrim" hidden>
+  <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sh-name"></div>
+</div>
+
+<script>
+const PANTONE=["Classic Blue","Viva Magenta","Mocha Mousse","Very Peri","Emerald","Ultra Violet","Marsala","Tangerine Tango","Greenery","Radiant Orchid"];
+// g: jenis kelamin keturunan yang menikah (F/M) — menentukan hela/parumaen
+const D=[
+ {n:"Ny Purnama Siahaan br Nababan",k:"Op. Sophie Boru",no:1,g:"F",sp:{n:"SM Siahaan",k:"Op. Sophie Doli",no:11,rip:1},c:[
+  {n:"Ny Deborah Sidabutar br Siahaan",k:"Debi, Mama Sophie",no:12,g:"F",sp:{n:"Herbert Sidabutar",k:"Bapak Sophie",no:45},c:[{n:"Sophie br Sidabutar",no:46},{n:"Irene br Sidabutar",no:47}]},
+  {n:"Ny Iko Simanjuntak br Siahaan",k:"Mama Manda",no:13,g:"F",sp:{n:"Manahan Simanjuntak",no:48},c:[{n:"Amanda br Simanjuntak",no:52}]},
+  {n:"Eggi R. N. br Siahaan",no:14,rip:1},
+  {n:"Ny Cathy Margaretha Lbn Tobing br Siahaan",k:"Mama Nadia",no:15,g:"F",sp:{n:"Jefry Lumban Tobing",k:"Bapak Nadia",no:68},c:[{n:"Nadia br Lbn Tobing",no:59},{n:"Rafael Lbn Tobing",no:61}]},
+  {n:"Ny Andrea Nababan br Siahaan",k:"Dea, Mama Arya",no:17,g:"F",sp:{n:"Jaya Nababan",k:"Bapak Arya",no:55},c:[{n:"Arya Nababan",no:58},{n:"Melodi br Nababan",no:62},{n:"Zita br Nababan",no:64}]},
+  {n:"Reinhard Siahaan",no:19}]},
+ {n:"Maurids Nababan",k:"Op. Melati Doli",no:2,g:"M",sp:{n:"Ny Lorena Nababan br Hutasoit",k:"Op. Melati Boru",no:21},c:[
+  {n:"Halasan Nababan",k:"Bapak Melati",no:23,g:"M",sp:{n:"Ny Tangkas Meriam Nababan br Pardede",k:"Mama Melati",no:66},c:[{n:"Melati Nathania br Nababan",no:73},{n:"Hans Partahan Ezekiel Nababan",no:83},{n:"Maharani Adriella br Nababan",no:91}]},
+  {n:"Maruli Nababan",no:24,g:"M",sp:{n:"Ny Hernawaty Nababan br Nainggolan",no:86,rip:1}},
+  {n:"Novran Nababan",no:28,g:"M",sp:{n:"Christine",no:95}},
+  {n:"Ny Milusi Pardosi br Nababan",no:67,g:"F",sp:{n:"Jeffry Pardosi",no:69},c:[{n:"Alexander Tristan Pardosi",no:76},{n:"Asser Pardosi",no:81}]}]},
+ {n:"Ny Lasmaria Sianipar br Nababan",k:"Op. Talicya Boru",no:3,g:"F",sp:{n:"Basirun Sianipar",k:"Op. Talicya Doli",no:16},c:[
+  {n:"Tommy Arnold Sianipar",k:"Bapak Talicya",no:18,g:"M",sp:{n:"Ny Taruli Sianipar br Sitompul",k:"Mama Talicya",no:60},c:[{n:"Talicya Novelina Riama Sianipar",no:63},{n:"Thaddeus Immanuel Sianipar",no:70},{n:"Timotheo Agape Sianipar",no:79},{n:"Togario Troy Sianipar",no:85}]},
+  {n:"Christ Raeval Sianipar",k:"Bapak Alvaro",no:20,g:"M",sp:{n:"Ny Miranti Tutiona br Tambunan",k:"Mama Alvaro",no:65},c:[{n:"Alvaro Jansen Cordiaz Sianipar",no:74}]},
+  {n:"Kalvin Sihol Sianipar",no:22,g:"M",sp:{n:"Ny Evelyn Rismawaty Natalia Sianipar br Tobing",no:75},c:[{n:"Calista Marilyn Daphne br Sianipar",no:78},{n:"Joanna Ruth Maria br Sianipar",no:84}]},
+  {n:"Ny Eva Hutabarat br Sianipar",k:"Mama Isabela",no:26,g:"F",sp:{n:"Leonardo Hutabarat",k:"Bapak Isabela",no:82},c:[{n:"Eleanor Isabella Julitha Hutabarat",no:87},{n:"Lionel Sebastian Yosia Hutabarat",no:89}]},
+  {n:"Putri Sari br Sianipar",no:34}]},
+ {n:"Ny Esta Erika Siahaan br Nababan",k:"Op. Marvelio Boru",no:4,g:"F",sp:{n:"Monang Siahaan",k:"Op. Marvelio Doli",no:25},c:[
+  {n:"Andy Sastra Siahaan",k:"Bapak Marvelio",no:27,g:"M",sp:{n:"Debora Junita Ria Panggabean",k:"Mama Marvelio",no:92},c:[{n:"Marvelio Mikhael Togu Siahaan",no:94}]}]},
+ {n:"Jhonry Nababan",k:"Bapak Asthon",no:5,g:"M",sp:{n:"Ny Haba Erika Nababan br Simanjuntak",k:"Mama Asthon",no:29},c:[
+  {n:"Asthon Fernando Nababan",no:30},
+  {n:"Alvin Fidiarta Nababan",no:32,g:"M",sp:{n:"Naomi Bunga Claudia br Simangungsong",no:96},c:[{n:"Sorai Kalani br Nababan",no:97}]},
+  {n:"Ataya Felicya Junita br Nababan",no:40}]},
+ {n:"Jannes Nababan",k:"Op. Gabriel Doli",no:6,g:"M",sp:{n:"Ny Juliamina Nababan br Hutahaean",k:"Op. Gabriel Boru",no:31},c:[
+  {n:"Pheny br Nababan",no:33,g:"F",sp:{n:"Wira K Purba",no:90},c:[{n:"Gabriel Purba",no:93}]},
+  {n:"Dhany Eko Nababan",no:35},{n:"Juan Nababan",no:41}]},
+ {n:"Bonatua Nababan",k:"Bapak Kevin",no:7,g:"M",sp:{n:"Ny Mathilda Nababan br Marpaung",k:"Mama Kevin",no:42},c:[{n:"Kevin Nababan",no:56}]},
+ {n:"Liat Nababan",k:"Bapak Mikael",no:8,g:"M",sp:{n:"Ny Elisabeth Nababan br Lubis",k:"Mama Mikael",no:39},c:[
+  {n:"Mikael Nababan",no:44},{n:"Natanael Nababan",no:49},{n:"Carel Nababan",no:54},{n:"Intan br Nababan",no:57}]},
+ {n:"Ny Merry Siahaan br Nababan",k:"Mama Chelsea",no:9,g:"F",sp:{n:"Ishak Agus Siahaan",k:"Bapak Chelsea",no:36,rip:1},c:[
+  {n:"Chelsea Maulia Siahaan",no:38},{n:"Carlo Julius Caesar Siahaan",no:43},{n:"Christy Caroline Siahaan",no:47},
+  {n:"Wina Siahaan",k:"Mama Baran",no:71,g:"F",sp:{n:"Abraham Sianipar",k:"Bapak Baran",no:72},c:[{n:"Aldebaran Sianipar",no:77}]}]},
+ {n:"Ny Julinda Butar Butar br Nababan",k:"Mama Jojo",no:10,g:"F",sp:{n:"Paul Butar Butar",k:"Bapak Jojo",no:37},c:[
+  {n:"Jonathan Philip Butar Butar",no:51},{n:"Joyceline Priscilla Butar Butar",no:53}]}
+];
+const GEN=["","Anak","Pahompu","Nini"];
+const ALL=[];let seq=0;
+function reg(p,gen,b,parent){
+  p.id=++seq;p.gen=gen;p.b=b;p.parent=parent;p.c=p.c||[];ALL.push(p);
+  if(p.sp){Object.assign(p.sp,{id:++seq,gen,b,partner:p,isSp:1});ALL.push(p.sp)}
+  p.c.forEach(ch=>reg(ch,gen+1,b,p));
+}
+D.forEach((p,i)=>reg(p,1,i+1,null));
+const byId=Object.fromEntries(ALL.map(p=>[p.id,p]));
+const esc=s=>String(s).replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]));
+const cv=b=>`var(--c${b})`;
+
+// ulos stripe & chips
+document.getElementById("ulos").innerHTML=D.map((_,i)=>`<i style="--c:${cv(i+1)}"></i>`).join("")+D.map((_,i)=>`<i style="--c:${cv(10-i)}"></i>`).join("");
+const short=n=>n.replace(/^Ny\.?\s+/,"").split(" ")[0];
+document.getElementById("chips").innerHTML=`<button class="chip all" data-b="0" aria-pressed="true"><span class="dot">∗</span>Semua</button>`+D.map((p,i)=>`<button class="chip" style="--c:${cv(i+1)}" data-b="${i+1}"><span class="dot">${i+1}</span>${esc(short(p.n))}</button>`).join("");
+
+// stats
+const blood=g=>ALL.filter(p=>!p.isSp&&p.gen===g).length;
+const sps=ALL.filter(p=>p.isSp).length;
+document.getElementById("stats").innerHTML=[[blood(1),"anak"],[blood(2),"pahompu"],[blood(3),"nini"],[sps,"pasangan"],[ALL.length,"jiwa tercatat"]]
+  .map(([v,l])=>`<li><b>${v}</b><span>${l}</span></li>`).join("");
+
+// tree
+const pbtn=(p,cls="")=>`<button class="pname ${p.isSp?"sp":""} ${cls}" data-id="${p.id}"><span class="no" title="No. urut">${p.no}</span>${esc(p.n)}${p.rip?'<span class="rip" title="Almarhum/almarhumah">†</span>':""}</button>`;
+function couple(p){
+  const nicks=[p.k,p.sp&&p.sp.k].filter(Boolean);
+  return `<div class="couple"><div class="line">${pbtn(p)}${p.sp?`<span class="amp">&amp;</span>${pbtn(p.sp)}`:""}</div>${nicks.length?`<span class="nick">${esc(nicks.join(" · "))}</span>`:""}</div>`;
+}
+let closed={};try{closed=JSON.parse(localStorage.getItem("poh-closed")||"{}")}catch(e){}
+document.getElementById("tree").innerHTML=D.map((p,i)=>{
+  const b=i+1;
+  return `<section class="branch ${closed[b]?"closed":""}" id="cabang-${b}" style="--c:${cv(b)}">
+   <div class="b-head"><span class="b-no">${b}</span><div class="b-main"><div class="b-kicker">Anak ke-${b} · ${PANTONE[i]}</div>${couple(p)}</div>
+   <button class="toggle" data-t="${b}" aria-label="Buka/tutup cabang ${b}" aria-expanded="${!closed[b]}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button></div>
+   <div class="b-body">${p.c.length?`<ol class="g2list">${p.c.map(ch=>`<li class="g2">${couple(ch)}${ch.c.length?`<div class="genlab">Anak (${ch.c.length})</div><ul class="g3list">${ch.c.map(gc=>`<li>${pbtn(gc)}</li>`).join("")}</ul>`:""}</li>`).join("")}</ol>`:""}</div>
+  </section>`}).join("");
+
+// interactions
+const scrim=document.getElementById("scrim"),sheet=document.getElementById("sheet");
+let lastFocus=null;
+function role(p){
+  if(!p.isSp)return GEN[p.gen];
+  return p.partner.g==="F"?"Hela":"Parumaen";
+}
+function list(arr){return arr.length?arr.map(x=>pbtn(x)).join(""):'<span class="none">—</span>'}
+function openPerson(id){
+  const p=byId[id];if(!p)return;
+  const blood=p.isSp?p.partner:p;
+  const spouse=p.isSp?p.partner:p.sp;
+  const parents=p.isSp?[]:(p.parent?[p.parent,p.parent.sp].filter(Boolean):[]);
+  const sibs=p.isSp?[]:(p.parent?p.parent.c:D).filter(x=>x!==p);
+  const kids=blood.c;
+  const desc=p.isSp?`${p.partner.g==="F"?"Suami":"Istri"} dari ${esc(p.partner.n)}`:`${GEN[p.gen]} · generasi ${["","I","II","III"][p.gen]}`;
+  sheet.style.setProperty("--c",cv(p.b));
+  sheet.innerHTML=`<div class="sheet-top"><div><span class="role" style="--c:${cv(p.b)}">${role(p)}</span>
+   <h2 id="sh-name"><span class="no">${p.no}</span>${esc(p.n)}${p.rip?' <span class="rip">†</span>':""}</h2>
+   ${p.k?`<span class="nick">${esc(p.k)}</span>`:""}</div><button class="close" aria-label="Tutup">×</button></div>
+   <dl class="facts">
+    <dt>Kedudukan</dt><dd>${desc}${p.rip?" · almarhum/almarhumah":""}</dd>
+    <dt>Cabang</dt><dd>Anak ke-${p.b}: ${esc(D[p.b-1].n)}</dd>
+    ${p.isSp?"":`<dt>Orang tua</dt><dd>${p.parent?list(parents):'<span>M. Nababan (Op. Halasan Doli) &amp; T. br Lubis (Op. Halasan Boru)</span>'}</dd>`}
+    <dt>Pasangan</dt><dd>${spouse?list([spouse]):'<span class="none">—</span>'}</dd>
+    ${p.isSp?"":`<dt>Saudara</dt><dd>${list(sibs)}</dd>`}
+    <dt>Anak</dt><dd>${list(kids)}</dd>
+    <dt>No. urut</dt><dd style="font-variant-numeric:tabular-nums">${p.no}</dd>
+   </dl>`;
+  if(scrim.hidden)lastFocus=document.activeElement;
+  scrim.hidden=false;document.body.style.overflow="hidden";
+  sheet.querySelector(".close").focus();
+}
+function closeSheet(){scrim.hidden=true;document.body.style.overflow="";lastFocus&&lastFocus.focus&&lastFocus.focus()}
+scrim.addEventListener("click",e=>{
+  if(e.target===scrim||e.target.closest(".close"))return closeSheet();
+  const b=e.target.closest(".pname");if(b)openPerson(+b.dataset.id);
+});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!scrim.hidden)closeSheet()});
+document.getElementById("tree").addEventListener("click",e=>{
+  const t=e.target.closest(".toggle");
+  if(t){const s=t.closest(".branch");s.classList.toggle("closed");const c=s.classList.contains("closed");t.setAttribute("aria-expanded",!c);closed[t.dataset.t]=c;try{localStorage.setItem("poh-closed",JSON.stringify(closed))}catch(err){}return}
+  const b=e.target.closest(".pname");if(b)openPerson(+b.dataset.id);
+});
+function goBranch(b){
+  const s=document.getElementById("cabang-"+b);if(!s)return;
+  s.classList.remove("closed");s.querySelector(".toggle").setAttribute("aria-expanded","true");
+  s.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});
+}
+/* ---------- POHON (bagan) ---------- */
+const vp=document.getElementById("vp"),stage=document.getElementById("stage");
+const W1=304,W2=276,IND=28,W3=W2-IND,H3=58,G3=10,VG=86,GAP2=26,GAP1=70,RW=380,RH=150;
+let focusB=0,view="tree",S=1,TX=0,TY=0,TW=0,TH=0;
+function ini(n){const w=n.replace(/^Ny\.?\s+/i,"").split(/\s+/).filter(x=>x&&!/^br\.?$/i.test(x));return((w[0]||"")[0]+((w[1]||"")[0]||"")).toUpperCase()}
+const row=(p,sp)=>`<div class="pr"><span class="av ${sp?"o":""} ${p.rip?"dead":""}" aria-hidden="true">${esc(ini(p.n))}</span>${pbtn(p)}</div>`;
+function cardH(p,band){return (band?40:0)+24+(band?0:20)+(p.sp?2:1)*46+(p.sp?7:0)+((p.k||p.sp&&p.sp.k)?24:0)+6}
+function nodeHTML(p,cls,x,y,w,h,kicker){
+  const nick=[p.k,p.sp&&p.sp.k].filter(Boolean).join(" · ");
+  const st=`left:${x}px;top:${y}px;width:${w}px;height:${h}px;--c:${cv(p.b)}`;
+  if(cls==="t3")return `<div class="tn t3" style="${st}">${row(p)}</div>`.replace('<div class="pr">','').replace(/<\/div><\/div>$/,"</div>");
+  const body=`${row(p)}${p.sp?row(p.sp,1):""}${nick?`<span class="nick">${esc(nick)}</span>`:""}`;
+  if(cls==="t1")return `<div class="tn t1" style="${st}"><div class="band"><b>Anak ke-${p.b}</b><span>${PANTONE[p.b-1]}</span></div><div class="inner">${body}</div></div>`;
+  return `<div class="tn ${cls}" style="${st}">${kicker?`<span class="tn-k">${kicker}</span>`:""}${body}</div>`;
+}
+function renderTree(){
+  const g1s=D.filter((_,i)=>!focusB||i+1==focusB);
+  g1s.forEach(a=>{a.cw=W2*a.c.length+GAP2*Math.max(0,a.c.length-1);a.sub=Math.max(W1,a.cw)});
+  const total=g1s.reduce((s,a)=>s+a.sub,0)+GAP1*(g1s.length-1);
+  TW=Math.max(total,RW);
+  const H1=Math.max(...g1s.map(a=>cardH(a,1)));
+  const H2=Math.max(...g1s.flatMap(a=>a.c.map(c=>cardH(c))));
+  const y0=0,y1=RH+VG,y2=y1+H1+VG;
+  let html="",paths=[],maxY=y2;
+  const rx=TW/2-RW/2;
+  html+=`<div class="tn root" style="left:${rx}px;top:${y0}px;width:${RW}px;height:${RH}px"><span class="tn-k">Pomparan</span><b>Ompung Halasan</b><span class="rc">M. Nababan <em>&amp;</em> T. br Lubis</span><small>Op. Halasan Doli · Op. Halasan Boru</small><div class="stripe">${D.map((_,i)=>`<i style="--c:${cv(i+1)}"></i>`).join("")}</div></div>`;
+  const line=(d,c,w)=>paths.push(`<path d="${d}" stroke="${c}"${w?` stroke-width="${w}"`:""}/>`);
+  const curve=(x1,y1,x2,y2,c,w)=>{const m=(y1+y2)/2;line(`M${x1} ${y1}C${x1} ${m} ${x2} ${m} ${x2} ${y2}`,c,w)};
+  let x=(TW-total)/2;
+  g1s.forEach(a=>{
+    const ax=x+a.sub/2-W1/2;
+    html+=nodeHTML(a,"t1",ax,y1,W1,H1);
+    curve(TW/2,y0+RH,ax+W1/2,y1,cv(a.b),4);
+    let cx=x+(a.sub-a.cw)/2;
+    a.c.forEach(ch=>{
+      const h=cardH(ch);
+      html+=nodeHTML(ch,"t2",cx,y2,W2,h,"Pahompu");
+      curve(ax+W1/2,y1+H1,cx+W2/2,y2,cv(a.b),3);
+      if(ch.c.length){
+        const rail=cx+14;let yy=y2+h+16;
+        ch.c.forEach(gc=>{html+=nodeHTML(gc,"t3",cx+IND,yy,W3,H3);const m=yy+H3/2;line(`M${rail} ${y2+h}V${m-10}Q${rail} ${m} ${rail+10} ${m}H${cx+IND}`,cv(a.b),2.5);yy+=H3+G3});
+        maxY=Math.max(maxY,yy);
+      } else maxY=Math.max(maxY,y2+h);
+      cx+=W2+GAP2;
+    });
+    x+=a.sub+GAP1;
+  });
+  TH=maxY+20;
+  stage.style.width=TW+"px";stage.style.height=TH+"px";
+  stage.innerHTML=`<svg width="${TW}" height="${TH}" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths.join("")}</svg>`+html;
+}
+const MINS=()=>vp.clientWidth<600?.72:.9;
+const clampS=s=>Math.max(.05,Math.min(2.5,s));
+function apply(){stage.style.transform=`translate(${TX}px,${TY}px) scale(${S})`}
+function fit(minS){
+  const w=vp.clientWidth,h=vp.clientHeight,pad=24;
+  let s=Math.min((w-pad*2)/TW,(h-pad*2)/TH,1.1);
+  if(minS&&s<minS){S=minS;TX=w/2-(TW/2)*S;TY=pad;apply();return}
+  S=s;TX=(w-TW*S)/2;TY=pad;apply();
+}
+function zoomAt(cx,cy,f){const ns=clampS(S*f);const wx=(cx-TX)/S,wy=(cy-TY)/S;S=ns;TX=cx-wx*S;TY=cy-wy*S;apply()}
+document.getElementById("zIn").onclick=()=>zoomAt(vp.clientWidth/2,vp.clientHeight/2,1.3);
+document.getElementById("zOut").onclick=()=>zoomAt(vp.clientWidth/2,vp.clientHeight/2,1/1.3);
+document.getElementById("zFit").onclick=()=>fit(0);
+document.getElementById("zFull").onclick=()=>{const tw=document.getElementById("treeView");tw.classList.toggle("full");document.body.style.overflow=tw.classList.contains("full")?"hidden":"";requestAnimationFrame(()=>fit(MINS()))};
+document.addEventListener("keydown",e=>{const tw=document.getElementById("treeView");if(e.key==="Escape"&&scrim.hidden&&tw.classList.contains("full")){tw.classList.remove("full");document.body.style.overflow="";fit(MINS())}});
+document.querySelector(".zoom").addEventListener("pointerdown",e=>e.stopPropagation());
+vp.addEventListener("wheel",e=>{e.preventDefault();const r=vp.getBoundingClientRect();zoomAt(e.clientX-r.left,e.clientY-r.top,Math.exp(-e.deltaY*(e.ctrlKey?.01:.0015)))},{passive:false});
+const ptr=new Map();let st=null,moved=false;
+function startGesture(){
+  const pts=[...ptr.values()];
+  st={S,TX,TY,pts:pts.map(p=>({...p}))};
+}
+vp.addEventListener("pointerdown",e=>{if(e.button>0)return;ptr.set(e.pointerId,{x:e.clientX,y:e.clientY});if(ptr.size===1)moved=false;startGesture();vp.classList.add("drag")});
+window.addEventListener("pointermove",e=>{
+  if(!ptr.has(e.pointerId))return;ptr.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  const pts=[...ptr.values()];
+  if(pts.length===1&&st.pts.length===1){const dx=pts[0].x-st.pts[0].x,dy=pts[0].y-st.pts[0].y;if(Math.abs(dx)+Math.abs(dy)>6)moved=true;if(moved){TX=st.TX+dx;TY=st.TY+dy;apply()}}
+  else if(pts.length>=2&&st.pts.length>=2){
+    moved=true;const r=vp.getBoundingClientRect();
+    const d0=Math.hypot(st.pts[0].x-st.pts[1].x,st.pts[0].y-st.pts[1].y)||1,d1=Math.hypot(pts[0].x-pts[1].x,pts[0].y-pts[1].y);
+    const c0x=(st.pts[0].x+st.pts[1].x)/2-r.left,c0y=(st.pts[0].y+st.pts[1].y)/2-r.top,c1x=(pts[0].x+pts[1].x)/2-r.left,c1y=(pts[0].y+pts[1].y)/2-r.top;
+    const ns=clampS(st.S*d1/d0);const wx=(c0x-st.TX)/st.S,wy=(c0y-st.TY)/st.S;S=ns;TX=c1x-wx*S;TY=c1y-wy*S;apply();
+  }
+});
+function endPtr(e){if(!ptr.has(e.pointerId))return;ptr.delete(e.pointerId);if(ptr.size)startGesture();else vp.classList.remove("drag")}
+window.addEventListener("pointerup",endPtr);window.addEventListener("pointercancel",endPtr);
+vp.addEventListener("click",e=>{
+  if(moved){e.stopPropagation();e.preventDefault();moved=false;return}
+  const b=e.target.closest(".pname");if(b)openPerson(+b.dataset.id);
+},true);
+function centerOn(id){
+  const el=stage.querySelector(`.pname[data-id="${id}"]`);if(!el)return;
+  const box=el.closest(".tn");const cx=box.offsetLeft+box.offsetWidth/2,cy=box.offsetTop+box.offsetHeight/2;
+  S=Math.max(S,.9);TX=vp.clientWidth/2-cx*S;TY=vp.clientHeight/3-cy*S;apply();
+  box.classList.remove("flash");void box.offsetWidth;box.classList.add("flash");setTimeout(()=>box.classList.remove("flash"),1800);
+}
+function setFocus(b){
+  focusB=+b;
+  document.querySelectorAll(".chip").forEach(c=>c.setAttribute("aria-pressed",String(+c.dataset.b===focusB)));
+  renderTree();fit(MINS());
+}
+function setView(v){
+  view=v;document.getElementById("treeView").hidden=v!=="tree";document.getElementById("listView").hidden=v!=="list";
+  document.getElementById("vTree").setAttribute("aria-pressed",v==="tree");document.getElementById("vList").setAttribute("aria-pressed",v==="list");
+  document.querySelectorAll(".chip").forEach(c=>c.setAttribute("aria-pressed",v==="tree"?String(+c.dataset.b===focusB):"false"));
+  try{localStorage.setItem("poh-view",v)}catch(e){}
+  if(v==="tree"){renderTree();fit(MINS())}
+}
+document.getElementById("vTree").onclick=()=>setView("tree");
+document.getElementById("vList").onclick=()=>setView("list");
+document.getElementById("chips").addEventListener("click",e=>{const c=e.target.closest(".chip");if(!c)return;const b=+c.dataset.b;
+  if(view==="tree"){history.replaceState(null,"",b?"#cabang-"+b:"#pohon");setFocus(b)}
+  else if(b){history.replaceState(null,"","#cabang-"+b);goBranch(b)}else window.scrollTo({top:0})});
+function fromHash(){const m=location.hash.match(/^#cabang-(\d+)$/);if(m){if(view==="tree")setFocus(m[1]);else goBranch(m[1])}}
+window.addEventListener("hashchange",fromHash);
+let rz;window.addEventListener("resize",()=>{clearTimeout(rz);rz=setTimeout(()=>{if(view==="tree")fit(MINS())},150)});
+{let v="tree";try{v=localStorage.getItem("poh-view")||"tree"}catch(e){}setView(v);fromHash()}
+
+// search
+const q=document.getElementById("q"),res=document.getElementById("results");
+const norm=s=>s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"");
+function hl(text,term){const i=norm(text).indexOf(term);return i<0?esc(text):esc(text.slice(0,i))+"<mark>"+esc(text.slice(i,i+term.length))+"</mark>"+esc(text.slice(i+term.length))}
+q.addEventListener("input",()=>{
+  const t=norm(q.value.trim());
+  if(t.length<2){res.hidden=true;return}
+  const hits=ALL.filter(p=>norm(p.n+" "+(p.k||"")).includes(t)).slice(0,30);
+  res.innerHTML=hits.length?hits.map(p=>`<button data-id="${p.id}" style="--c:${cv(p.b)}"><span class="dot"></span><span><span class="no">${p.no}</span>${hl(p.n,t)}<small>${role(p)} · cabang ${p.b}${p.k?" · "+hl(p.k,t):""}</small></span></button>`).join(""):`<div class="none">Tidak ada nama yang cocok dengan “${esc(q.value)}”.</div>`;
+  res.hidden=false;
+});
+res.addEventListener("click",e=>{
+  const b=e.target.closest("button[data-id]");if(!b)return;
+  const id=+b.dataset.id;res.hidden=true;
+  if(view==="tree"){if(focusB&&focusB!==byId[id].b)setFocus(byId[id].b);vp.scrollIntoView({block:"nearest"});centerOn(id);openPerson(id);return}
+  goBranch(byId[id].b);
+  const el=document.querySelector(`#tree .pname[data-id="${id}"]`);
+  if(el){setTimeout(()=>{el.scrollIntoView({block:"center"});el.classList.remove("flash");void el.offsetWidth;el.classList.add("flash")},350)}
+  openPerson(id);
+});
+document.addEventListener("click",e=>{if(!e.target.closest(".search"))res.hidden=true});
+q.addEventListener("keydown",e=>{if(e.key==="Escape"){q.value="";res.hidden=true}});
+
+// font size
+let fs=18;try{fs=+localStorage.getItem("poh-fs")||18}catch(e){}
+function setFs(v){fs=Math.max(15,Math.min(26,v));document.documentElement.style.setProperty("--fs",fs+"px");try{localStorage.setItem("poh-fs",fs)}catch(e){}}
+setFs(fs);
+document.getElementById("fsUp").onclick=()=>setFs(fs+2);
+document.getElementById("fsDown").onclick=()=>setFs(fs-2);
+
+// PWA (aktif hanya di versi yang di-hosting sendiri)
+if("serviceWorker" in navigator&&document.querySelector('link[rel="manifest"]')){navigator.serviceWorker.register("sw.js").catch(()=>{})}
+</script>
+</body>
+</html>
